@@ -1,0 +1,20 @@
+PyTorch is a deep learning library
+
+PyTorch's three main components include:
+tensor library as a fundamental building block for computing, great for switch from GPU and CPU
+automatic differentiation for model optimization
+deep learning utility functions, making it easier to implement and train deep neural network models
+
+tensor(s) are mathematical objects that can be characterized by their order (or rank)
+PyTorch tensors are data containers for array-like structures
+
+
+
+
+
+
+
+
+
+
+

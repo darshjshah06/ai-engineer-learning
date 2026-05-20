@@ -1,0 +1,20 @@
+Feedforward networks called multi-layered perceptrons (MLPs) for tabular regression and classification tasks
+Convolutional neural networks (CNNs) to process images for vision tasks like image classification
+Recurrent networks (RNNs, GRUs, and LSTMs) to handle sequential data for sequential tasks like text generation
+Embeddings and token representations to encode text data for natural language tasks like text classification
+
+Neural Network foundation:
+Layers: The fundamental building blocks of any neural network architecture. We start with an input layer that takes in the data, hidden layers that process the data, and the output layer that generates the prediction. Each layer contains a collection of artificial neurons that process information.
+Parameters: There are two main parameters: weights and biases. Weights control the strength of connections between neurons across different layers, while the bias term provides more flexibility in learning complex patterns. During training, the network learns to update and adjust these parameters through backpropagation.
+Forward Pass: The process by which the input data travels through the network layers, being transformed by the weights, biases, and activation functions to generate an output.
+
+Model size refers to the total number of parameters and the amount of space required to be stored on disk or loaded into memory.
+Gradient descent is used to find out the best setting(s) for the task at hand.
+
+
+
+
+
+
+
+
