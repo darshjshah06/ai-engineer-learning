@@ -5,16 +5,146 @@ tensor library as a fundamental building block for computing, great for switch f
 automatic differentiation for model optimization
 deep learning utility functions, making it easier to implement and train deep neural network models
 
+
+tensors ----------------
+
+
 tensor(s) are mathematical objects that can be characterized by their order (or rank)
 PyTorch tensors are data containers for array-like structures
 
+import torch
+
+# create a 0D tensor (scalar) from a Python integer
+tensor0d = torch.tensor(1)
+
+# create a 1D tensor (vector) from a Python list
+tensor1d = torch.tensor([1, 2, 3])
+
+# create a 2D tensor from a nested Python list
+tensor2d = torch.tensor([[1, 2], [3, 4]])
+
+# create a 3D tensor from a nested Python list
+tensor3d = torch.tensor([[[1, 2], [3, 4]], [[5, 6], [7, 8]]])
+
+tensor1d = torch.tensor([1, 2, 3])
+print(tensor1d.dtype)  # prints torch.int64 because pyTorch default is 64-integer data type.
+
+floatvec = torch.tensor([1.0, 2.0, 3.0])
+print(floatvec.dtype) # prints torch.folat32 because 32 but is more precise
+
+floatvec = tensor1d.to(torch.float32)
+print(floatvec.dtype)  # changes dtype to torch.float32 with the .to method.
+
+tensor2d = torch.tensor([[1, 2, 3],
+                         [4, 5, 6]])
+tensor2d   # prints
+
+print(tensor2d.shape)  # output torch.Size([2, 3])
+tensor2d.reshape(3, 2)
+
+# output
+tensor([[1, 2],
+        [3, 4],
+        [5, 6]])
+
+more common command for reshaping tensors is .view()
+
+tensor2d.view(3, 2)
+
+#output
+tensor([[1, 2],
+        [3, 4],
+        [5, 6]])
+
+to flip a tensor use .T, it flips across its diagonal.
+tensor2d.T
+
+#output
+tensor([[1, 4],
+        [2, 5],
+        [3, 6]])
+
+to multiply tensor/matrices use .matmul or use @ which is the same but more clean.
+tensor2d.matmul(tensor2d.T)
+tensor2d @ tensor2d.T
+
+# output for both
+tensor([[14, 32],
+        [32, 77]])
 
 
 
+autograd -------------------------
+
+
+PyTorch’s autograd system provides functions to compute gradients in dynamic computational graphs automatically. 
+
+import torch.nn.functional as F
+
+y = torch.tensor([1.0])  # true label
+x1 = torch.tensor([1.1]) # input feature
+w1 = torch.tensor([2.2]) # weight parameter
+b = torch.tensor([0.0])  # bias unit
+
+z = x1 * w1 + b          # net input
+a = torch.sigmoid(z)     # activation & output for Neural Network, aka turns everything in range 0-1.
+
+loss = F.binary_cross_entropy(a, y)
+print(loss)
+
+#output 
+tensor(0.0852)
 
 
 
+automatic differentiation -------------------
+ 
+Gradients are required when training neural networks via the popular backpropagation algorithm
+which can be thought of as an implementation of the chain rule from calculus for neural networks
+are required when training neural networks via the popular backpropagation algorithm
+
+The chain rule is a way to compute gradients of a loss function with respect to the model’s parameters 
+in a computation graph. This provides the information needed to update each parameter in a way that 
+minimizes the loss function, which serves as a proxy for measuring the model’s performance,
+using a method such as gradient descent.
+
+import torch.nn.functional as F
+from torch.autograd import grad
+
+y = torch.tensor([1.0])
+x1 = torch.tensor([1.1])
+w1 = torch.tensor([2.2], requires_grad=True) #Track operations involving this tensor so gradients can be computed later.
+b = torch.tensor([0.0], requires_grad=True)  # same here
+
+z = x1 * w1 + b
+a = torch.sigmoid(z)
+
+loss = F.binary_cross_entropy(a, y)
+
+grad_L_w1 = grad(loss, w1, retain_graph=True) 
+grad_L_b = grad(loss, b, retain_graph=True)
+
+print(grad_L_w1) # simpler way explained later
+print(grad_L_b)  # same here
+
+#output
+
+(tensor([-0.0898]),)
+(tensor([-0.0817]),)
+
+
+# what is above is the "manual" way to do it. But PyTorch provides a higher level tool to automate,
+we can call the .backward on the loss and the gradient will compute the gradient of all the leaf nodes,
+which will be stored via the tensors' .grad
+
+loss.backward()
+print(w1.grad)
+print(b.grad)
+
+#output
+tensor([-0.0898])
+tensor([-0.0817])
 
 
 
-
+implementing multiplayer -------------------------------
