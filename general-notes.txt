@@ -12,6 +12,42 @@ Model size refers to the total number of parameters and the amount of space requ
 Gradient descent is used to find out the best setting(s) for the task at hand.
 
 
+model.parameter() are all trainable parameters like weights and bias
+model.buffers() are all non-trainable parameters
+
+large model = high accuracy but slow, small model = less accurate but fast
+
+model.eval()       # sets the model into evaluation mode
+start = time.perf_counter()  # measures the elapsed time
+iters = 50
+with torch.inference_mode():    # turns off gradient tracking
+    for _ in range(iters):
+        _ = model(x)
+        if x.device.type == "cuda":
+            torch.cuda.synchronize()
+elapsed = time.perf_counter() - start
+latency = elapsed / iters    # returns average
+
+
+torch.cuda is used to setup and run deep learning operations 
+torch.cuda.empty_cache() clears and unused cache
+torch.cuda.reset_peak_memory_stats() rests PyTorch’s internal tracker
+torch.cuda.memory_allocated() reports memory in use
+torch.cuda.max_memory_allocated() reports the peak memory used
+t.numel() gives total number of elements in the tensor t
+t.element_size() gives the size in bytes of each element
+
+def model_size_bytes(model):
+    """Return model size in bytes (params + buffers)."""
+    model_params = list(model.parameters()) + list(model.buffers())
+    size = 0
+    for t in model_params:
+        size += t.numel() * t.element_size()
+    return size
+
+size_bytes = model_size_bytes(model)
+
+print(f"[Model Size] {size_bytes:,} bytes ~ {size_bytes / (1024**2):.3f} MB")
 
 
 
