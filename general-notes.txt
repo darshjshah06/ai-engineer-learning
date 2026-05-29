@@ -46,10 +46,22 @@ def model_size_bytes(model):
     return size
 
 size_bytes = model_size_bytes(model)
-
 print(f"[Model Size] {size_bytes:,} bytes ~ {size_bytes / (1024**2):.3f} MB")
 
 
+the most widely used activation funtion is the Rectified Linear Unit (ReLU), which zeros out the negative values while keeping positive values.
+Loss Funtion measures how far the network's predictions are from the actual targets
+
+import torch.nn as nn
+
+# Regression — Mean Squared Error 
+loss_fn = nn.MSELoss()
+
+# Classification — Binary Cross-Entropy
+loss_fn = nn.BCEWithLogitsLoss()
+
+import torch.optim as optim
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
 
 
