@@ -237,3 +237,67 @@ Encoder + Decoder - sequence tasks like translations and answering questions
 In Encoder and Decoder it has Attention Layer than MLP Layer, also Training Stability is there.
 Attention layer gathers more context based on tokens, MLP layer adjusts the understanding.
 
+Text Tokenizer turns text into smaller units called Tokens
+
+Query, Key, and Value Tokens
+Query is used and key "answers/provides" for the query. then dot product of it, lastly, softmax
+Each K,Q,V have their own matrix, then that's put through a formula (softmax) for the output
+
+Reformer uses LSH attention, hence Q,K, V
+Longformer uses local attention, the words to the left and right
+
+
+
+The Role of Attention
+gives the ability to create responses
+not every word has the same weight, focusing on relevant info is what's called Attention.
+
+Context Length or Attention Span is the max number of tokens that the LLM can process at once. Depends on size, resources, output/input.
+
+Two-Phase Inference Process to generating text.
+
+Prefill:
+Tokenization
+Embedding Conversion
+Initial Processing
+
+Decoder Phase:
+Attention computation
+Probability calculation
+Token selection
+Continuation Checkpoints
+
+How to turn token choices from logits (raw probability) to Probability?
+
+temperature control, "guts to make decisions", higher equals random, lower equals more calculated
+Top-p sampling, instead of all words, only ones that add up to chosen probability
+
+
+How to keep output fresh?
+
+presence Penalty, fixed penalty to any token shown before, prevents reusing
+frequency penalty, more a word appears, the less its going to be chosen
+
+How to limit tokens?
+
+set limits
+stop sequence
+end of sequence detection
+
+Beam Search:
+
+multiple searches and paths at a time, like a chess player.
+Have multiple candidates
+Compute probability for next tokens for each candidate
+Keep only the best combination of sequences and tokens
+Continue until reached, desired length or stop condition
+Select the sequence with the highest Probability
+
+
+
+How to deal with context length challenge?
+
+Memory Usage, Processing, Resources Allocation
+KV Cache is a solution.
+(Key-Value), makes it better but trade off is memory usage.
+
