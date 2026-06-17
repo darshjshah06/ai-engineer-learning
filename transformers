@@ -202,5 +202,38 @@ result = transcriber(
 print(result)
 
 
+Increase Model Size = Increase Model Data that it is Trained on.
 
+Carbon footprint of training models
+Type of Energy Sources (regions)
+Training time (pretrained means reusing, fine-tuning helps, starting small)
+Hardware
+
+Transfer Learning means using Task A (Huge Dataset) to train Task B (Small Dataset)
+Its like removing its head but keeping the body and applying it to another model.
+
+
+
+Transformer Architecture
+
+Encoder accepts input and turns them into numbers or embeddings, it is bi directional and self attentional 
+Decoder accepts text inputs and also decodes the encoders numbers/embeddings/features. it is uni directional, auto regressive, masked self attention
+
+Encoder takes inputs and passes to decoder to generate a prediction
+
+Encoder-only models: Good for tasks that require understanding of the input, such as sentence classification and named entity recognition.
+Decoder-only models: Good for generative tasks such as text generation.
+Encoder-decoder models or sequence-to-sequence models: Good for generative tasks that require an input, such as translation or summarization.
+
+Architecture: This is the skeleton of the model.
+Checkpoints: These are the weights that will be loaded in a given architecture.
+
+Language Models:
+Trained by Masked language modeling, and causal language modeling.
+Encoder models - understand text
+Decoder models - generate text
+Encoder + Decoder - sequence tasks like translations and answering questions
+
+In Encoder and Decoder it has Attention Layer than MLP Layer, also Training Stability is there.
+Attention layer gathers more context based on tokens, MLP layer adjusts the understanding.
 
