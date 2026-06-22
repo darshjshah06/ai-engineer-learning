@@ -8,7 +8,7 @@ to download information from Model Hub, we use:
 
 from transformers import AutoTokenizer
 
-checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"    #not an actual command, ot's just a variable 
 tokenizer = AutoTokenizer.from_pretrained(checkpoint)
 
 now you will get a list of dictionary that is ready to feed to the model, convert IDs into Tensors:
@@ -17,7 +17,7 @@ raw_inputs = [
     "I've been waiting for a HuggingFace course my whole life.",
     "I hate this so much!",
 ]
-inputs = tokenizer(raw_inputs, padding=True, truncation=True, return_tensors="pt")   #retunr_tensor to specify the tensors we want back
+inputs = tokenizer(raw_inputs, padding=True, truncation=True, return_tensors="pt")   #return_tensor to specify the tensors we want back
 print(inputs)
 
 
@@ -30,5 +30,83 @@ from transformers import AutoModel
 
 checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
 model = AutoModel.from_pretrained(checkpoint)
+
+this will create a huge output, usually has 3Ds
+Batch Size, Sequence Length, and Hidden Size      ex: torch.Size([2,16,768])
+
+model has 1 or few hidden layers. the output is sent directly to the head to be processed.
+
+There are many different architectures available in 🤗 Transformers, with each one designed around tackling a specific task.
+
+*Model (retrieve the hidden states)
+*ForCausalLM
+*ForMaskedLM
+*ForMultipleChoice
+*ForQuestionAnswering
+*ForSequenceClassification
+*ForTokenClassification
+and others 🤗
+
+
+Using a model with a sequence classifier head:
+
+from transformers import AutoModelForSequenceClassification
+checkpoint = "distilbert-base-uncased-finetuned-sst-2-english"
+model = AutoModelForSequenceClassification.from_pretrained(checkpoint)
+outputs = model(**inputs)
+
+# output command
+
+print(outputs.logits.shape)
+
+
+
+
+to softmax logits:
+
+import torch
+
+predictions = torch.nn.functional.softmax(outputs.logits, dim=-1)
+print(predictions)
+
+
+
+Creating a Transformer
+
+from transformers import AutoModel           # fetch model architecture for a given checkpoint
+model = AutoModel.from_pretrained("bert-base-cased")      # start by creating
+
+model.save_pretrained("directory_on_my_computer")  # saving and loading
+
+from transformers import AutoModel
+model = AutoModel.from_pretrained("directory_on_my_computer")    # to reuse a saved model
+
+model.push_to_hub("my-awesome-model")       # to share your model + the tokenization to the Hub
+from transformers import AutoModel
+model = AutoModel.from_pretrained("your-username/my-awesome-model")
+
+from transformers import AutoTokenizer
+tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")       #encoding text
+encoded_input = tokenizer("Hello, I'm a single sentence!")
+print(encoded_input)     # you get input_ids, token_type_ids, attention_mark 
+
+tokenizer.decode(encoded_input["input_ids"])        # to decode and back to original text
+
+encoded_input = tokenizer("How are you?", "I'm fine, thank you!")   # to encode multiple sentences at once
+print(encoded_input)
+
+encoded_input = tokenizer("How are you?", "I'm fine, thank you!", return_tensors="pt")   # to encode multiple and return tensors
+print(encoded_input)
+
+encoded_input = tokenizer(
+    ["How are you?", "I'm fine, thank you!"],
+    padding=True,      # padding makes the sentences the same size by adding "padding"
+    truncation=True,   # if sequences longer than the mode can handle
+    max_length=5,
+    return_tensors="pt",
+)
+print(encoded_input)       # this all makes the tensors the exact same size
+
+
 
 
