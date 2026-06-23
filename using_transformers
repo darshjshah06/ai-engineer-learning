@@ -108,5 +108,10 @@ encoded_input = tokenizer(
 print(encoded_input)       # this all makes the tensors the exact same size
 
 
+tokenization
+
+word based: each word has a specific IDs, similar words have different IDs, not all words have IDs, you can limit word IDs
+character based: split into characters, 256 characters + numbers, more complete, very large tokens
+subword-based: middle man from word and character based, rare words = characters or subwords and common words = word, 
 
 
