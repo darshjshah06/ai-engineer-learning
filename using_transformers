@@ -204,3 +204,21 @@ model_inputs = tokenizer(sequences, truncation=True)
 
 # Will truncate the sequences that are longer than the specified max length
 model_inputs = tokenizer(sequences, max_length=8, truncation=True)
+
+
+
+Text Generation Inference (TGI)
+is designed to be stable and predictable in production, using fixed sequence lengths to keep memory usage consistent.
+Flash Attention loads data once into SRAM and performs all calculations there, minimizing expensive memory transfers.
+
+vLLM uses PagedAttention
+splits the model’s memory into smaller blocks. This clever system means it can handle different-sized 
+requests more flexibly and doesn’t waste memory space. 
+
+llama.cpp 
+uses quantization techniques to reduce model size and memory requirements while maintaining good performance.
+reduces models weight.
+
+
+Deploying and intergrating these models
+
