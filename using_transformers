@@ -220,5 +220,159 @@ uses quantization techniques to reduce model size and memory requirements while 
 reduces models weight.
 
 
-Deploying and intergrating these models
+Deploying and intergrating these models:
 
+
+#TGI
+from huggingface_hub import InferenceClient
+client = InferenceClient(
+    model="http://localhost:8080",  # URL to the TGI server
+)
+
+# TGI
+response = client.text_generation(  # more for 1 prompt
+    "Tell me a story",    # prompt
+    max_new_tokens=100,
+    temperature=0.7,
+    top_p=0.95,
+    details=True,
+    stop_sequences=[],
+)
+print(response.generated_text)
+
+# For chat format
+response = client.chat_completion(       # more for roles and messages
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Tell me a story"},
+    ],
+    max_tokens=100,
+    temperature=0.7,
+    top_p=0.95,
+)
+print(response.choices[0].message.content)
+
+
+
+
+
+
+#llama.cpp
+from huggingface_hub import InferenceClient
+
+# Initialize client pointing to llama.cpp server
+client = InferenceClient(
+    model="http://localhost:8080/v1",  # URL to the llama.cpp server
+    token="sk-no-key-required",  # llama.cpp server requires this placeholder
+)
+
+# Text generation
+response = client.text_generation(
+    "Tell me a story",
+    max_new_tokens=100,
+    temperature=0.7,
+    top_p=0.95,
+    details=True,
+)
+print(response.generated_text)
+
+# For chat format
+response = client.chat_completion(
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Tell me a story"},
+    ],
+    max_tokens=100,
+    temperature=0.7,
+    top_p=0.95,
+)
+print(response.choices[0].message.content)
+
+# you can use llama-cpp-python package for direct model access and more control
+
+
+
+#vLLM
+from huggingface_hub import InferenceClient
+client = InferenceClient(
+    model="http://localhost:8000/v1",  # URL to the vLLM server
+)
+
+# Text generation
+response = client.text_generation(
+    "Tell me a story",
+    max_new_tokens=100,
+    temperature=0.7,
+    top_p=0.95,
+    details=True,
+)
+print(response.generated_text)
+
+# For chat format
+response = client.chat_completion(
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Tell me a story"},
+    ],
+    max_tokens=100,
+    temperature=0.7,
+    top_p=0.95,
+)
+print(response.choices[0].message.content)
+
+
+Advanced Generation Control:
+
+#TGI
+client.generate(
+    "Write a creative story",
+    temperature=0.8,  # Higher for more creativity
+    top_p=0.95,  # Consider top 95% probability mass
+    top_k=50,  # Consider top 50 tokens
+    max_new_tokens=100,  # Maximum length
+    repetition_penalty=1.1,  # Reduce repetition
+)
+
+#llama.cp
+response = client.completions.create(
+    model="smollm2-1.7b-instruct",  # Model name (can be any string for llama.cpp server)
+    prompt="Write a creative story",
+    temperature=0.8,  # Higher for more creativity
+    top_p=0.95,  # Consider top 95% probability mass
+    frequency_penalty=1.1,  # Reduce repetition
+    presence_penalty=0.1,  # Reduce repetition
+    max_tokens=100,  # Maximum length
+)
+output = llm(
+    "Write a creative story",
+    temperature=0.8,
+    top_p=0.95,
+    top_k=50,
+    max_tokens=100,
+    repeat_penalty=1.1,
+)
+
+
+exam at end:
+
+how many dimensions does the tensor output by the base Transformer model have?
+the sequence length, batch size, and hidden size.
+
+models head?
+additional component usually made up of one or a few layers to convert the prediction to a task-specific output
+
+AutoModel?
+an object that returns correct architecture based on checkpoint
+
+What method is most of the tokenizer API centered around?
+calling the tokenizer objcet directly, the __call__ can handle anything
+
+is ths code correct:
+
+from transformers import AutoTokenizer, AutoModel
+tokenizer = AutoTokenizer.from_pretrained("bert-base-cased")
+model = AutoModel.from_pretrained("gpt2")
+encoded = tokenizer("Hey!", return_tensors="pt")
+result = model(**encoded)
+
+tokenizer and model should match, must have same checkpoint.
