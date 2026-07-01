@@ -6,6 +6,8 @@ Hypervisor is a program that is incharge of VM, it runs and manages VMs
 Container has a host pc, a lightweight env that is like a box. instead of sharing apps, its sharing OS aka "Kernel"
 docker can edit abd run these containers
 
+dockerhub - hub.docker.com to get images
+
 docker images - filename of the read only template:latest (default tag)
 dockerfile - looks like:
 FROM
